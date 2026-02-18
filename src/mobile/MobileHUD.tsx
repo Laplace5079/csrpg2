@@ -192,7 +192,7 @@ export function createHUDStyles(theme: HUDTheme, isMobile: boolean): string {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: ${isMobile ? '18px' : '16px};
+      font-size: ${isMobile ? '18px' : '16px'};
       cursor: pointer;
       opacity: ${theme.opacity};
     }
