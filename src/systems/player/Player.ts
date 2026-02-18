@@ -128,6 +128,12 @@ export class Player {
     this.position.y += this.velocity.y * deltaTime;
     this.position.z += this.velocity.z * deltaTime;
     
+    // 简单的边界检测
+    const bound = 48;
+    this.position.x = Math.max(-bound, Math.min(bound, this.position.x));
+    this.position.z = Math.max(-bound, Math.min(bound, this.position.z));
+    
+    // 地面检测
     if (this.position.y <= GAME_CONFIG.PLAYER_HEIGHT) {
       this.position.y = GAME_CONFIG.PLAYER_HEIGHT;
       this.velocity.y = 0;

@@ -303,12 +303,82 @@ class Game {
     this.isRunning = true;
     this.core.startNewGame();
     
+    // 显示开场剧情
+    this.showIntroDialogue();
+    
     // 请求指针锁定
     this.inputManager?.requestPointerLock();
     
     // 开始游戏循环
     this.lastTime = performance.now();
     this.gameLoop();
+  }
+  
+  // ============== 显示开场剧情 ==============
+  private showIntroDialogue(): void {
+    const dialogue = document.createElement('div');
+    dialogue.id = 'intro-dialogue';
+    dialogue.innerHTML = `
+      <div class="dialogue-content">
+        <div class="dialogue-speaker">系统</div>
+        <div class="dialogue-text">欢迎来到墨境。在这个被量子裂隙入侵的世界里，你是一名孤军奋战的战士。</div>
+        <div class="dialogue-text">前进吧，击败敌人，找到回家的路。</div>
+        <div class="dialogue-hint">按 WASD 移动，空格跳跃，左键射击</div>
+      </div>
+    `;
+    
+    const style = document.createElement('style');
+    style.textContent = `
+      #intro-dialogue {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid #00ffff;
+        border-radius: 10px;
+        padding: 30px;
+        max-width: 600px;
+        z-index: 500;
+        animation: fadeIn 0.5s;
+      }
+      .dialogue-speaker {
+        color: #00ffff;
+        font-size: 24px;
+        margin-bottom: 15px;
+        font-weight: bold;
+      }
+      .dialogue-text {
+        color: #fff;
+        font-size: 18px;
+        margin-bottom: 10px;
+        line-height: 1.6;
+      }
+      .dialogue-hint {
+        color: #ffaa00;
+        font-size: 16px;
+        margin-top: 20px;
+        text-align: center;
+        animation: pulse 2s infinite;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        to { opacity: 1; transform: translateX(-50%) translateY(0); }
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+    `;
+    document.head.appendChild(style);
+    document.body.appendChild(dialogue);
+    
+    // 5秒后自动隐藏
+    setTimeout(() => {
+      dialogue.style.transition = 'opacity 1s';
+      dialogue.style.opacity = '0';
+      setTimeout(() => dialogue.remove(), 1000);
+    }, 8000);
   }
   
   // ============== 游戏循环 ==============
