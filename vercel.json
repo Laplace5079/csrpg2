@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm_exec_command": "npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm install --force"
+  "installCommand": "npm install"
 }
