@@ -50,8 +50,8 @@ export class InputManager {
   private previousState: Partial<InputState>;
   
   // 鼠标灵敏度
-  public sensitivity: number = 0.002;
-  public aimSensitivity: number = 0.001;
+  public sensitivity: number = 0.0008;
+  public aimSensitivity: number = 0.0004;
   
   // 回调
   private keyDownCallbacks: Map<string, () => void> = new Map();

@@ -33,10 +33,10 @@ export const GAME_CONFIG = {
   // 玩家
   PLAYER_HEIGHT: 1.8,
   PLAYER_WIDTH: 0.5,
-  MOVE_SPEED: 5.0,
-  SPRINT_SPEED: 8.0,
-  JUMP_FORCE: 7.0,
-  CROUCH_SPEED: 2.5,
+  MOVE_SPEED: 3.5,
+  SPRINT_SPEED: 5.5,
+  JUMP_FORCE: 6.0,
+  CROUCH_SPEED: 1.8,
   
   // 武器
   DEFAULT_WEAPON: 'quantum_pistol',
