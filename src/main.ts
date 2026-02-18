@@ -128,8 +128,8 @@ class Game {
   // ============== 场景 ==============
   private async initScene(): Promise<void> {
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0a0a1a);
-    this.scene.fog = new THREE.FogExp2(0x0a0a1a, 0.01);
+    this.scene.background = new THREE.Color(0x151530);
+    this.scene.fog = new THREE.FogExp2(0x151530, 0.008);
     
     // 相机
     this.camera = new THREE.PerspectiveCamera(
@@ -140,40 +140,44 @@ class Game {
     this.core.scene = this.scene;
     this.core.camera = this.camera;
     
-    // 光照
-    const ambient = new THREE.AmbientLight(0x404060, 0.6);
+    // 光照 - 更亮
+    const ambient = new THREE.AmbientLight(0x606080, 1.2);
     this.scene.add(ambient);
     
-    const directional = new THREE.DirectionalLight(0xffffff, 1);
-    directional.position.set(10, 20, 10);
+    const directional = new THREE.DirectionalLight(0xffffff, 1.5);
+    directional.position.set(10, 30, 10);
     directional.castShadow = true;
     directional.shadow.mapSize.width = 2048;
     directional.shadow.mapSize.height = 2048;
     this.scene.add(directional);
     
-    // 霓虹点光
-    const neonLight1 = new THREE.PointLight(0xff00ff, 1, 30);
-    neonLight1.position.set(-10, 3, -10);
+    // 霓虹点光 - 更亮
+    const neonLight1 = new THREE.PointLight(0xff00ff, 2, 50);
+    neonLight1.position.set(-15, 5, -15);
     this.scene.add(neonLight1);
     
-    const neonLight2 = new THREE.PointLight(0x00ffff, 1, 30);
-    neonLight2.position.set(10, 3, 10);
+    const neonLight2 = new THREE.PointLight(0x00ffff, 2, 50);
+    neonLight2.position.set(15, 5, 15);
     this.scene.add(neonLight2);
     
-    // 地面
+    const neonLight3 = new THREE.PointLight(0x00ff00, 1.5, 40);
+    neonLight3.position.set(0, 5, -20);
+    this.scene.add(neonLight3);
+    
+    // 地面 - 更亮
     const groundGeo = new THREE.PlaneGeometry(100, 100);
     const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x1a1a2e,
-      roughness: 0.8,
-      metalness: 0.2,
+      color: 0x2a2a4a,
+      roughness: 0.7,
+      metalness: 0.3,
     });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
     this.scene.add(ground);
     
-    // 网格
-    const grid = new THREE.GridHelper(100, 50, 0x00ffff, 0x222244);
+    // 网格 - 更亮
+    const grid = new THREE.GridHelper(100, 50, 0x00ffff, 0x333366);
     this.scene.add(grid);
     
     // 障碍物 (可作为掩体)

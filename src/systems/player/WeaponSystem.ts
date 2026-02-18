@@ -211,7 +211,7 @@ export class WeaponSystem {
     if (result) {
       this.createBullet(result);
       const recoil = this.currentWeapon.getRecoil();
-      (this.player as any).addShake(recoil.pitch * 0.5);
+      (this.player as any).addShake(recoil.pitch * 0.2);
       this.core.eventBus.emit(GameEvent.WEAPON_FIRED, { weaponId: this.currentWeapon.data.id, ammo: this.currentWeapon.currentAmmo });
     }
   }

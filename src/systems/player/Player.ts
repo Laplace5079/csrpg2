@@ -146,7 +146,7 @@ export class Player {
   }
 
   public addShake(intensity: number): void {
-    this.shakeIntensity = Math.min(1, this.shakeIntensity + intensity);
+    this.shakeIntensity = Math.min(0.3, this.shakeIntensity + intensity * 0.3);
   }
 
   private updateCameraShake(deltaTime: number): void {
