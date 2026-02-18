@@ -1,0 +1,584 @@
+{
+  "metadata": {
+    "title": "量子裂隙战争",
+    "setting": "2077年，未来都市",
+    "totalChapters": 6,
+    "version": "1.0.0"
+  },
+  "characters": [
+    {
+      "id": "char_protag",
+      "name": "主角",
+      "avatar": "assets/characters/protag.png",
+      "color": "#00ff88"
+    },
+    {
+      "id": "char_commander",
+      "name": "指挥官亚历克斯",
+      "avatar": "assets/characters/commander.png",
+      "color": "#4a90d9"
+    },
+    {
+      "id": "char_mentor",
+      "name": "导师卡莎",
+      "avatar": "assets/characters/mentor.png",
+      "color": "#d94a8c"
+    },
+    {
+      "id": "char_hacker",
+      "name": "黑客ZERO",
+      "avatar": "assets/characters/zero.png",
+      "color": "#9b59b6"
+    },
+    {
+      "id": "char_survivor",
+      "name": "幸存者林博士",
+      "avatar": "assets/characters/dr_lin.png",
+      "color": "#f39c12"
+    },
+    {
+      "id": "char_antagonist",
+      "name": "裂隙意识",
+      "avatar": "assets/characters/void.png",
+      "color": "#e74c3c"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "chapter_1",
+      "title": "第一章：训练营",
+      "description": "2077年，量子裂隙战争爆发两年后。作为新招募的士兵，你来到第7号前哨基地接受训练，为对抗裂隙生物做准备。",
+      "dialogues": [
+        "c1_intro",
+        "c1_mentor_intro",
+        "c1_training_start",
+        "c1_training_complete",
+        "c1_first_battle",
+        "c1_victory",
+        "c1_chapter_end"
+      ],
+      "unlocksLevel": "level_1"
+    },
+    {
+      "id": "chapter_2",
+      "title": "第二章：废弃工厂",
+      "description": "完成训练后，你的第一个实战任务是被派往一座废弃的量子武器工厂调查。那里似乎有裂隙生物活动的迹象...",
+      "dialogues": [
+        "c2_mission_briefing",
+        "c2_arrive_factory",
+        "c2_factory_exploration",
+        "c2_first_encounter",
+        "c2_boss_fight",
+        "c2_discovery",
+        "c2_chapter_end"
+      ],
+      "prerequisites": ["chapter_1"],
+      "unlocksLevel": "level_2"
+    },
+    {
+      "id": "chapter_3",
+      "title": "第三章：地铁站",
+      "description": "根据工厂中找到的线索，你追踪裂隙势力到了一座废弃的地铁站。那里隐藏着连接量子网络的秘密通道。",
+      "dialogues": [
+        "c3_new_orders",
+        "c3_subway_entrance",
+        "c3_subway_tunnel",
+        "c3_ambush",
+        "c3_ally_join",
+        "c3_subway_core",
+        "c3_chapter_end"
+      ],
+      "prerequisites": ["chapter_2"],
+      "unlocksLevel": "level_3"
+    },
+    {
+      "id": "chapter_4",
+      "title": "第四章：研究所",
+      "description": "黑客ZERO帮助你追踪到裂隙势力的源头——一座废弃的量子研究所。林博士被囚禁在那里，她掌握着关闭裂隙的关键。",
+      "dialogues": [
+        "c4_hacker_contact",
+        "c4_infiltration",
+        "c4_lab_exploration",
+        "c5_rescue_mission",
+        "c5_dr_lin_reveal",
+        "c5_escape",
+        "c5_chapter_end"
+      ],
+      "prerequisites": ["chapter_3"],
+      "unlocksLevel": "level_4"
+    },
+    {
+      "id": "chapter_5",
+      "title": "第五章：城市废墟",
+      "description": "从研究所获得关键情报后，你得知裂隙核心就在城市的废墟之下。通往核心的道路充满危险，但别无选择。",
+      "dialogues": [
+        "c5_journey_to_city",
+        "c5_city_entrance",
+        "c5_ruins_battle",
+        "c5_memory_fragment",
+        "c5_final_preparation",
+        "c5_chapter_end"
+      ],
+      "prerequisites": ["chapter_4"],
+      "unlocksLevel": "level_5"
+    },
+    {
+      "id": "chapter_6",
+      "title": "第六章：裂隙核心",
+      "description": "最终的决战时刻到来。裂隙核心是一个巨大的量子奇点，它正在吞噬整个世界。你必须做出选择——关闭它，还是...",
+      "dialogues": [
+        "c6_approach_core",
+        "c6_core_battle_1",
+        "c6_revelation",
+        "c6_final_choice",
+        "c6_boss_ultimate",
+        "c6_ending_a",
+        "c6_ending_b"
+      ],
+      "prerequisites": ["chapter_5"],
+      "unlocksLevel": "level_6"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "c1_intro",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "欢迎来到第7号前哨基地，新兵。我是指挥官亚历克斯。", "emotion": "neutral" },
+        { "text": "2077年，量子裂隙战争已经持续了两年。裂隙——那些连接现实与虚假的裂缝——正在吞噬我们的世界。", "emotion": "serious" },
+        { "text": "但你不必担心。我们有最好的训练设施，最先进的量子武器，以及...生存的意志。", "emotion": "confident" }
+      ],
+      "nextDialogueId": "c1_mentor_intro"
+    },
+    {
+      "id": "c1_mentor_intro",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "嘿，新兵。我是卡莎，你的导师。", "emotion": "smile" },
+        { "text": "别被指挥官吓到了。他只是太久没有见到新面孔了。", "emotion": "laugh" },
+        { "text": "跟我来，我带你熟悉一下训练场。记住，在这里生存下来，你才能对抗外面的裂隙生物。", "emotion": "serious" }
+      ],
+      "nextDialogueId": "c1_training_start"
+    },
+    {
+      "id": "c1_training_start",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "这是量子武器模拟器。用你的意念连接它，感受量子场的波动。", "emotion": "teach" },
+        { "text": "裂隙生物由暗物质构成，普通武器对它们无效。只有量子武器才能造成伤害。", "emotion": "serious" },
+        { "text": "好了，展示给我看你学到了什么。", "emotion": "expect" }
+      ],
+      "nextDialogueId": "c1_training_complete"
+    },
+    {
+      "id": "c1_training_complete",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "不错，比我想象的要好。", "emotion": "impressed" },
+        { "text": "你很有天赋，新兵。也许你真的能在这场战争中活下来。", "emotion": "smile" },
+        { "text": "但是模拟训练到此为止了。真实的战斗...那完全是另一回事。", "emotion": "serious" }
+      ],
+      "nextDialogueId": "c1_first_battle"
+    },
+    {
+      "id": "c1_first_battle",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "警报！前哨基地东侧检测到裂隙波动！", "emotion": "alert" },
+        { "text": "是新兵！他们突破防线了！", "emotion": "shout" },
+        { "text": "新人，这是你的第一战。活下去。", "emotion": "serious" }
+      ],
+      "background": "assets/backgrounds/base_alert.png",
+      "effect": "screen_shake"
+    },
+    {
+      "id": "c1_victory",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "你做到了！漂亮的一战！", "emotion": "excited" },
+        { "text": "我第一次面对裂隙生物的时候，腿都在发抖。你比我有种多了。", "emotion": "smile" },
+        { "text": "指挥官会给你分配第一个正式任务。准备好了吗？", "emotion": "serious" }
+      ]
+    },
+    {
+      "id": "c1_chapter_end",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "干得好，新兵。", "emotion": "proud" },
+        { "text": "你的第一个任务：前往废弃的47号工厂。那里检测到了异常的量子波动。", "emotion": "serious" },
+        { "text": "小心行事。那里的情况...可能比我们想象的更复杂。", "emotion": "concerned" }
+      ],
+      "nextDialogueId": "c2_mission_briefing"
+    },
+    {
+      "id": "c2_mission_briefing",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "47号工厂曾是量子武器的研发设施。", "emotion": "neutral" },
+        { "text": "两年前战争爆发时，那里被遗弃了。但最近，卫星检测到那里有能量反应。", "emotion": "serious" },
+        { "text": "我需要你潜入调查。带回任何有价值的情报。", "emotion": "determined" }
+      ],
+      "nextDialogueId": "c2_arrive_factory"
+    },
+    {
+      "id": "c2_arrive_factory",
+      "characterId": "char_protag",
+      "content": [
+        { "text": "（这就是47号工厂吗...一片废墟。）", "emotion": "thoughtful" }
+      ],
+      "background": "assets/backgrounds/factory_exterior.png"
+    },
+    {
+      "id": "c2_factory_exploration",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "保持警惕。这地方有股...不祥的预感。", "emotion": "cautious" },
+        { "text": "检测到生命反应！小心！", "emotion": "alert" }
+      ],
+      "nextDialogueId": "c2_first_encounter"
+    },
+    {
+      "id": "c2_first_encounter",
+      "characterId": "char_antagonist",
+      "content": [
+        { "text": "......", "emotion": "silent" },
+        { "text": "生者...闯入...领地...", "emotion": "distorted" }
+      ],
+      "effect": "glitch"
+    },
+    {
+      "id": "c2_boss_fight",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "那是裂隙守卫！它是由高浓度暗物质构成的！", "emotion": "shout" },
+        { "text": "攻击它的核心！那是他唯一的弱点！", "emotion": "alert" }
+      ],
+      "effect": "boss_intro"
+    },
+    {
+      "id": "c2_discovery",
+      "characterId": "char_protag",
+      "content": [
+        { "text": "（工厂深处...有某种装置在运转。）", "emotion": "shock" },
+        { "text": "（这是...量子中继器？它在向某个地方发送信号！）", "emotion": "realize" }
+      ],
+      "nextDialogueId": "c2_chapter_end"
+    },
+    {
+      "id": "c2_chapter_end",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "干得漂亮。我们分析了你的发现。", "emotion": "serious" },
+        { "text": "信号指向了地铁网络。看来裂隙势力在地下有更大的阴谋。", "emotion": "concerned" },
+        { "text": "下一个任务：找到地铁站的入口，追踪信号源。", "emotion": "determined" }
+      ]
+    },
+    {
+      "id": "c3_new_orders",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "根据工厂的信号坐标，我们锁定了3号地铁站。", "emotion": "neutral" },
+        { "text": "那个站点在战前就废弃了，但现在...它成了裂隙的交通网络。", "emotion": "serious" },
+        { "text": "小心行事。如果情报没错，那里应该有裂隙守卫把守。", "emotion": "cautious" }
+      ],
+      "nextDialogueId": "c3_subway_entrance"
+    },
+    {
+      "id": "c3_subway_entrance",
+      "characterId": "char_protag",
+      "content": [
+        { "text": "（入口被破坏了...但还能进去。）", "emotion": "thoughtful" }
+      ],
+      "background": "assets/backgrounds/subway_entrance.png"
+    },
+    {
+      "id": "c3_subway_tunnel",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "这里的量子场...好混乱。", "emotion": "uncomfortable" },
+        { "text": "裂隙正在扩张。它们把地铁网络变成了传送门。", "emotion": "concerned" }
+      ],
+      "nextDialogueId": "c3_ambush"
+    },
+    {
+      "id": "c3_ambush",
+      "characterId": "char_hacker",
+      "content": [
+        { "text": "等等！前方有埋伏！", "emotion": "shout" },
+        { "text": "我是ZERO。指挥官叫我来支援你。", "emotion": "neutral" },
+        { "text": "放心，我可比他们会黑客多了。", "emotion": "smile" }
+      ],
+      "choices": [
+        {
+          "id": "c3_ambush_choice_1",
+          "text": "感谢支援。你知道这里的布局吗？",
+          "nextDialogueId": "c3_ally_join"
+        },
+        {
+          "id": "c3_ambush_choice_2",
+          "text": "为什么支援来得这么晚？",
+          "effect": { "setFlag": "suspicious_of_zero" }
+        }
+      ]
+    },
+    {
+      "id": "c3_ally_join",
+      "characterId": "char_hacker",
+      "content": [
+        { "text": "当然。我可是黑进了他们的系统，把地图都复制过来了。", "emotion": "proud" },
+        { "text": "跟着我，我知道一条通往核心的捷径。", "emotion": "smile" }
+      ],
+      "nextDialogueId": "c3_subway_core"
+    },
+    {
+      "id": "c3_subway_core",
+      "characterId": "char_hacker",
+      "content": [
+        { "text": "就是这里...量子信号的中转站。", "emotion": "focused" },
+        { "text": "我在破解防火墙。但需要时间...", "emotion": "concentrate" },
+        { "text": "找到了！信号通往城郊的研究所！", "emotion": "excited" }
+      ],
+      "nextDialogueId": "c3_chapter_end"
+    },
+    {
+      "id": "c3_chapter_end",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "很好。研究所...那是战前最重要的量子研究设施。", "emotion": "serious" },
+        { "text": "如果裂隙势力控制了那里，情况就严重了。", "emotion": "concerned" },
+        { "text": "你和ZERO一起潜入研究所。带回任何发现。", "emotion": "determined" }
+      ]
+    },
+    {
+      "id": "c4_hacker_contact",
+      "characterId": "char_hacker",
+      "content": [
+        { "text": "研究所的安保系统很复杂，但我已经找到了漏洞。", "emotion": "confident" },
+        { "text": "唯一的问题是...里面有幸存者的生命反应。", "emotion": "serious" }
+      ],
+      "nextDialogueId": "c4_infiltration"
+    },
+    {
+      "id": "c4_infiltration",
+      "characterId": "char_protag",
+      "content": [
+        { "text": "（潜入了研究所...这里的量子场好强。）", "emotion": "cautious" }
+      ],
+      "background": "assets/backgrounds/lab_inside.png"
+    },
+    {
+      "id": "c4_lab_exploration",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "这些是...量子实验记录。", "emotion": "shock" },
+        { "text": "他们在尝试打开通往另一个维度的门。", "emotion": "horror" },
+        { "text": "天啊...这就是裂隙的起源！", "emotion": "realize" }
+      ],
+      "nextDialogueId": "c5_rescue_mission"
+    },
+    {
+      "id": "c5_rescue_mission",
+      "characterId": "char_survivor",
+      "content": [
+        { "text": "救...救我...", "emotion": "weak" },
+        { "text": "我是林博士...这里的负责人...", "emotion": "tired" },
+        { "text": "裂隙...是我不小心打开的...", "emotion": "regret" }
+      ],
+      "choices": [
+        {
+          "id": "c5_rescue_choice_1",
+          "text": "振作起来，博士。我们来救你了。",
+          "nextDialogueId": "c5_dr_lin_reveal"
+        },
+        {
+          "id": "c5_rescue_choice_2",
+          "text": "你是怎么打开裂隙的？",
+          "effect": { "setVariable": { "name": "dr_lin_trust", "value": "low" } }
+        }
+      ]
+    },
+    {
+      "id": "c5_dr_lin_reveal",
+      "characterId": "char_survivor",
+      "content": [
+        { "text": "裂隙...是量子实验的意外。", "emotion": "sad" },
+        { "text": "但我找到了关闭它的方法...", "emotion": "determined" },
+        { "text": "核心...裂隙核心在城市的废墟下面。", "emotion": "serious" }
+      ],
+      "nextDialogueId": "c5_escape"
+    },
+    {
+      "id": "c5_escape",
+      "characterId": "char_hacker",
+      "content": [
+        { "text": "没时间了！裂隙守卫来了！", "emotion": "alert" },
+        { "text": "带上博士，我们冲出去！", "emotion": "shout" }
+      ],
+      "nextDialogueId": "c5_chapter_end"
+    },
+    {
+      "id": "c5_chapter_end",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "林博士带来了关键情报。", "emotion": "serious" },
+        { "text": "裂隙核心位于旧城区的地下。那里是裂隙的发源地。", "emotion": "determined" },
+        { "text": "这是最后的战斗了。准备好面对一切。", "emotion": "final" }
+      ]
+    },
+    {
+      "id": "c5_journey_to_city",
+      "characterId": "char_protag",
+      "content": [
+        { "text": "（曾经的繁华都市...现在只剩废墟。）", "emotion": "melancholy" }
+      ],
+      "background": "assets/backgrounds/city_ruins.png"
+    },
+    {
+      "id": "c5_city_entrance",
+      "characterId": "char_mentor",
+      "content": [
+        { "text": "量子场在这里非常强烈。裂隙核心就在附近。", "emotion": "serious" }
+      ],
+      "nextDialogueId": "c5_ruins_battle"
+    },
+    {
+      "id": "c5_ruins_battle",
+      "characterId": "char_antagonist",
+      "content": [
+        { "text": "入侵者...越来越多...", "emotion": "angry" },
+        { "text": "你们无法阻止...湮灭...", "emotion": "threat" }
+      ],
+      "effect": "boss_intro"
+    },
+    {
+      "id": "c5_memory_fragment",
+      "characterId": "char_survivor",
+      "content": [
+        { "text": "小心！裂隙在读取你的记忆！", "emotion": "shout" },
+        { "text": "用你的意志力抵抗！", "emotion": "alert" }
+      ],
+      "nextDialogueId": "c5_final_preparation"
+    },
+    {
+      "id": "c5_final_preparation",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "你做得够多了。", "emotion": "serious" },
+        { "text": "前方就是裂隙核心。那里有你必须做出的选择。", "emotion": "solemn" },
+        { "text": "无论你决定什么...我们都会支持你。", "emotion": "proud" }
+      ],
+      "nextDialogueId": "c6_approach_core"
+    },
+    {
+      "id": "c6_approach_core",
+      "characterId": "char_protag",
+      "content": [
+        { "text": "（这就是...裂隙核心。）", "emotion": "shock" }
+      ],
+      "background": "assets/backgrounds/void_core.png",
+      "effect": "reality_distortion"
+    },
+    {
+      "id": "c6_core_battle_1",
+      "characterId": "char_antagonist",
+      "content": [
+        { "text": "我是裂隙...", "emotion": "void" },
+        { "text": "我是无限...", "emotion": "void" },
+        { "text": "我是你们最深的恐惧...", "emotion": "void" }
+      ],
+      "effect": "boss_battle"
+    },
+    {
+      "id": "c6_revelation",
+      "characterId": "char_survivor",
+      "content": [
+        { "text": "等等！裂隙...不是敌人！", "emotion": "shout" },
+        { "text": "它是被困的灵魂...是实验的受害者！", "emotion": "realize" },
+        { "text": "关闭核心会解放他们...但也会关闭两个世界的大门。", "emotion": "difficult" }
+      ],
+      "nextDialogueId": "c6_final_choice"
+    },
+    {
+      "id": "c6_final_choice",
+      "characterId": "char_protag",
+      "content": [
+        { "text": "（选择吧。关闭裂隙，拯救世界...或者保持现状，给两个世界一个未来。）", "emotion": "determined" }
+      ],
+      "choices": [
+        {
+          "id": "c6_choice_close",
+          "text": "关闭裂隙。结束这一切。",
+          "nextDialogueId": "c6_ending_a",
+          "effect": { "setVariable": { "name": "ending", "value": "close" } }
+        },
+        {
+          "id": "c6_choice_keep",
+          "text": "保留裂隙。给两个世界一个机会。",
+          "nextDialogueId": "c6_ending_b",
+          "effect": { "setVariable": { "name": "ending", "value": "keep" } }
+        }
+      ]
+    },
+    {
+      "id": "c6_ending_a",
+      "characterId": "char_commander",
+      "content": [
+        { "text": "你关闭了裂隙...", "emotion": "solemn" },
+        { "text": "世界安全了。虽然失去了通往其他维度的可能...", "emotion": "melancholy" },
+        { "text": "但你是英雄。所有人都不会忘记你做了什么。", "emotion": "proud" }
+      ],
+      "music": "assets/music/victory_theme.mp3"
+    },
+    {
+      "id": "c6_ending_b",
+      "characterId": "char_hacker",
+      "content": [
+        { "text": "你选择了冒险...", "emotion": "surprised" },
+        { "text": "裂隙依然存在。两个世界开始融合...", "emotion": "wonder" },
+        { "text": "未来会是怎样，没有人知道。但至少...我们有了希望。", "emotion": "hopeful" }
+      ],
+      "music": "assets/music/ending_theme.mp3"
+    },
+    {
+      "id": "c6_boss_ultimate",
+      "characterId": "char_antagonist",
+      "content": [
+        { "text": "不！！！", "emotion": "rage" },
+        { "text": "我不会...让你们...", "emotion": "fury" }
+      ],
+      "effect": "final_boss"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_training_camp",
+      "name": "训练营",
+      "dialogues": ["c1_intro", "c1_mentor_intro", "c1_training_start", "c1_training_complete"]
+    },
+    {
+      "id": "scene_factory",
+      "name": "废弃工厂",
+      "dialogues": ["c2_arrive_factory", "c2_factory_exploration", "c2_first_encounter", "c2_boss_fight"]
+    },
+    {
+      "id": "scene_subway",
+      "name": "地铁站",
+      "dialogues": ["c3_subway_entrance", "c3_subway_tunnel", "c3_ambush", "c3_subway_core"]
+    },
+    {
+      "id": "scene_lab",
+      "name": "研究所",
+      "dialogues": ["c4_infiltration", "c4_lab_exploration", "c5_rescue_mission", "c5_dr_lin_reveal"]
+    },
+    {
+      "id": "scene_city",
+      "name": "城市废墟",
+      "dialogues": ["c5_city_entrance", "c5_ruins_battle", "c5_memory_fragment", "c5_final_preparation"]
+    },
+    {
+      "id": "scene_core",
+      "name": "裂隙核心",
+      "dialogues": ["c6_approach_core", "c6_core_battle_1", "c6_revelation", "c6_final_choice"]
+    }
+  ]
+}

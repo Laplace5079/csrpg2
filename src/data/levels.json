@@ -1,0 +1,659 @@
+{
+  "metadata": {
+    "gameTitle": "量子裂隙战争",
+    "totalLevels": 6,
+    "version": "1.0.0"
+  },
+  "levels": [
+    {
+      "id": "level_1",
+      "name": "训练营：初战",
+      "description": "在第7号前哨基地完成你的第一次战斗训练。对抗入侵的裂隙生物。",
+      "chapter": 1,
+      "difficulty": "easy",
+      "environment": {
+        "background": "assets/backgrounds/base_training.png",
+        "music": "assets/music/training_camp.ogg",
+        "ambient": "assets/ambient/base_hum.ogg",
+        "timeOfDay": "day",
+        "weather": "clear"
+      },
+      "objectives": [
+        {
+          "id": "obj_1_1",
+          "description": "击败所有裂隙生物",
+          "type": "eliminate",
+          "target": "void_spawn",
+          "requiredCount": 5
+        },
+        {
+          "id": "obj_1_2",
+          "description": "保持50%以上生命值",
+          "type": "survive",
+          "optional": false
+        },
+        {
+          "id": "obj_1_3",
+          "description": "在90秒内完成任务",
+          "type": "custom",
+          "optional": true
+        }
+      ],
+      "enemies": [
+        {
+          "id": "void_spawn",
+          "type": "void_spawn",
+          "count": 5,
+          "spawnPoints": ["spawn_1", "spawn_2", "spawn_3"],
+          "spawnDelay": 3000,
+          "behavior": "charge"
+        }
+      ],
+      "spawnPoints": [
+        { "id": "spawn_1", "position": { "x": -10, "y": 0, "z": 5 }, "type": "enemy" },
+        { "id": "spawn_2", "position": { "x": 10, "y": 0, "z": 5 }, "type": "enemy" },
+        { "id": "spawn_3", "position": { "x": 0, "y": 0, "z": -10 }, "type": "enemy" },
+        { "id": "player_start", "position": { "x": 0, "y": 0, "z": 0 }, "type": "ally" }
+      ],
+      "player": {
+        "allowedWeapons": ["quantum_pistol", "quantum_sword"],
+        "maxHealth": 100,
+        "startingPosition": { "x": 0, "y": 0, "z": 0 },
+        "abilities": ["dash", "shield"]
+      },
+      "reward": {
+        "experience": 100,
+        "items": ["quantum_shard_x3"],
+        "currency": 50
+      },
+      "unlockCondition": {
+        "type": "chapter_complete",
+        "value": "chapter_1"
+      },
+      "nextLevel": "level_2",
+      "estimatedTime": 5,
+      "recommendedLevel": 1
+    },
+    {
+      "id": "level_2",
+      "name": "废弃工厂：暗影追踪",
+      "description": "潜入废弃的47号工厂，调查异常的量子波动。",
+      "chapter": 2,
+      "difficulty": "easy",
+      "environment": {
+        "background": "assets/backgrounds/factory_interior.png",
+        "music": "assets/music/factory_ambient.ogg",
+        "ambient": "assets/ambient/machinery_hum.ogg",
+        "timeOfDay": "dusk",
+        "weather": "clear"
+      },
+      "objectives": [
+        {
+          "id": "obj_2_1",
+          "description": "探索工厂并找到控制室",
+          "type": "reach",
+          "target": "control_room"
+        },
+        {
+          "id": "obj_2_2",
+          "description": "击败裂隙守卫",
+          "type": "eliminate",
+          "target": "void_guardian",
+          "requiredCount": 1
+        },
+        {
+          "id": "obj_2_3",
+          "description": "获取量子中继器数据",
+          "type": "collect",
+          "target": "data_core",
+          "requiredCount": 1,
+          "optional": false
+        }
+      ],
+      "enemies": [
+        {
+          "id": "void_sentry",
+          "type": "void_sentry",
+          "count": 6,
+          "spawnPoints": ["spawn_corridor", "spawn_warehouse"],
+          "spawnDelay": 2000,
+          "behavior": "patrol"
+        },
+        {
+          "id": "void_guardian",
+          "type": "void_guardian_boss",
+          "count": 1,
+          "spawnPoints": ["spawn_boss"],
+          "behavior": "guardian"
+        }
+      ],
+      "spawnPoints": [
+        { "id": "spawn_entrance", "position": { "x": 0, "y": 0, "z": 20 }, "type": "ally" },
+        { "id": "spawn_corridor", "position": { "x": -8, "y": 0, "z": 10 }, "type": "enemy" },
+        { "id": "spawn_warehouse", "position": { "x": 8, "y": 0, "z": 0 }, "type": "enemy" },
+        { "id": "spawn_boss", "position": { "x": 0, "y": 0, "z": -15 }, "type": "enemy" },
+        { "id": "control_room", "position": { "x": 0, "y": 2, "z": -20 }, "type": "trigger" },
+        { "id": "data_core", "position": { "x": 5, "y": 1, "z": -18 }, "type": "item" }
+      ],
+      "player": {
+        "allowedWeapons": ["quantum_pistol", "quantum_sword", "quantum_rifle"],
+        "maxHealth": 120,
+        "startingPosition": { "x": 0, "y": 0, "z": 20 },
+        "abilities": ["dash", "shield", "scan"]
+      },
+      "reward": {
+        "experience": 200,
+        "items": ["quantum_shard_x5", "health_generator"],
+        "currency": 100,
+        "unlocks": ["quantum_rifle"]
+      },
+      "unlockCondition": {
+        "type": "chapter_complete",
+        "value": "chapter_1"
+      },
+      "nextLevel": "level_3",
+      "estimatedTime": 10,
+      "recommendedLevel": 2
+    },
+    {
+      "id": "level_3",
+      "name": "地铁站：地下危机",
+      "description": "追踪信号进入废弃地铁站，面对更多的裂隙生物。",
+      "chapter": 3,
+      "difficulty": "normal",
+      "environment": {
+        "background": "assets/backgrounds/subway_platform.png",
+        "music": "assets/music/subway_ambient.ogg",
+        "ambient": "assets/ambient/train_hum.ogg",
+        "timeOfDay": "night",
+        "weather": "clear"
+      },
+      "objectives": [
+        {
+          "id": "obj_3_1",
+          "description": "通过隧道到达中转站",
+          "type": "reach",
+          "target": "transfer_station"
+        },
+        {
+          "id": "obj_3_2",
+          "description": "击败伏击的裂隙部队",
+          "type": "eliminate",
+          "target": "void_ambusher",
+          "requiredCount": 8
+        },
+        {
+          "id": "obj_3_3",
+          "description": "保护ZERO完成破解",
+          "type": "protect",
+          "target": "zero_npc",
+          "requiredCount": 1,
+          "optional": false
+        },
+        {
+          "id": "obj_3_4",
+          "description": "获取研究所坐标",
+          "type": "collect",
+          "target": "coordinates",
+          "requiredCount": 1
+        }
+      ],
+      "enemies": [
+        {
+          "id": "void_ambusher",
+          "type": "void_ambusher",
+          "count": 8,
+          "spawnPoints": ["spawn_tunnel_1", "spawn_tunnel_2", "spawn_platform"],
+          "spawnDelay": 1500,
+          "behavior": "ambush"
+        },
+        {
+          "id": "void_hunter",
+          "type": "void_hunter",
+          "count": 3,
+          "spawnPoints": ["spawn_hunter"],
+          "spawnDelay": 5000,
+          "behavior": "stalk"
+        }
+      ],
+      "spawnPoints": [
+        { "id": "spawn_entrance", "position": { "x": 0, "y": 0, "z": 25 }, "type": "ally" },
+        { "id": "spawn_tunnel_1", "position": { "x": -5, "y": 0, "z": 15 }, "type": "enemy" },
+        { "id": "spawn_tunnel_2", "position": { "x": 5, "y": 0, "z": 10 }, "type": "enemy" },
+        { "id": "spawn_platform", "position": { "x": 0, "y": 0, "z": 0 }, "type": "enemy" },
+        { "id": "spawn_hunter", "position": { "x": -10, "y": 2, "z": -5 }, "type": "enemy" },
+        { "id": "zero_npc", "position": { "x": 3, "y": 0, "z": -5 }, "type": "ally" },
+        { "id": "transfer_station", "position": { "x": 0, "y": 0, "z": -15 }, "type": "trigger" },
+        { "id": "coordinates", "position": { "x": 0, "y": 1, "z": -15 }, "type": "item" }
+      ],
+      "player": {
+        "allowedWeapons": ["quantum_pistol", "quantum_sword", "quantum_rifle", "quantum_shotgun"],
+        "maxHealth": 150,
+        "startingPosition": { "x": 0, "y": 0, "z": 25 },
+        "abilities": ["dash", "shield", "scan", "grapple"]
+      },
+      "reward": {
+        "experience": 350,
+        "items": ["quantum_shard_x8", "decoy_module"],
+        "currency": 150,
+        "unlocks": ["quantum_shotgun"]
+      },
+      "unlockCondition": {
+        "type": "chapter_complete",
+        "value": "chapter_2"
+      },
+      "nextLevel": "level_4",
+      "estimatedTime": 15,
+      "recommendedLevel": 4
+    },
+    {
+      "id": "level_4",
+      "name": "研究所：营救行动",
+      "description": "潜入量子研究所，营救被囚禁的林博士。",
+      "chapter": 4,
+      "difficulty": "normal",
+      "environment": {
+        "background": "assets/backgrounds/lab_facility.png",
+        "music": "assets/music/lab_ambient.ogg",
+        "ambient": "assets/ambient/tech_hum.ogg",
+        "timeOfDay": "day",
+        "weather": "clear"
+      },
+      "objectives": [
+        {
+          "id": "obj_4_1",
+          "description": "入侵研究所安保系统",
+          "type": "custom",
+          "target": "security_hack"
+        },
+        {
+          "id": "obj_4_2",
+          "description": "找到林博士的位置",
+          "type": "reach",
+          "target": "dr_lab"
+        },
+        {
+          "id": "obj_4_3",
+          "description": "击败实验室守卫",
+          "type": "eliminate",
+          "target": "lab_guard",
+          "requiredCount": 4
+        },
+        {
+          "id": "obj_4_4",
+          "description": "带着博士安全撤离",
+          "type": "protect",
+          "target": "dr_lin_npc",
+          "requiredCount": 1,
+          "optional": false
+        }
+      ],
+      "enemies": [
+        {
+          "id": "security_drone",
+          "type": "security_drone",
+          "count": 6,
+          "spawnPoints": ["spawn_lab_entry", "spawn_corridor"],
+          "spawnDelay": 2000,
+          "behavior": "patrol"
+        },
+        {
+          "id": "lab_guard",
+          "type": "lab_guard_boss",
+          "count": 1,
+          "spawnPoints": ["spawn_boss_lab"],
+          "behavior": "guardian"
+        },
+        {
+          "id": "void_containment",
+          "type": "void_containment_unit",
+          "count": 3,
+          "spawnPoints": ["spawn_containment"],
+          "spawnDelay": 3000,
+          "behavior": "guard"
+        }
+      ],
+      "spawnPoints": [
+        { "id": "spawn_entry", "position": { "x": 0, "y": 0, "z": 20 }, "type": "ally" },
+        { "id": "spawn_lab_entry", "position": { "x": -8, "y": 2, "z": 15 }, "type": "enemy" },
+        { "id": "spawn_corridor", "position": { "x": 8, "y": 0, "z": 10 }, "type": "enemy" },
+        { "id": "spawn_boss_lab", "position": { "x": 0, "y": 0, "z": -10 }, "type": "enemy" },
+        { "id": "spawn_containment", "position": { "x": -5, "y": 2, "z": -5 }, "type": "enemy" },
+        { "id": "dr_lab", "position": { "x": 0, "y": 0, "z": -12 }, "type": "trigger" },
+        { "id": "dr_lin_npc", "position": { "x": 0, "y": 0, "z": -12 }, "type": "ally" },
+        { "id": "security_hack", "position": { "x": 0, "y": 3, "z": 18 }, "type": "trigger" }
+      ],
+      "player": {
+        "allowedWeapons": ["quantum_pistol", "quantum_sword", "quantum_rifle", "quantum_shotgun", "quantum_sniper"],
+        "maxHealth": 180,
+        "startingPosition": { "x": 0, "y": 0, "z": 20 },
+        "abilities": ["dash", "shield", "scan", "grapple", "hack"]
+      },
+      "reward": {
+        "experience": 500,
+        "items": ["quantum_shard_x10", "shield_generator", "keycard_alpha"],
+        "currency": 250,
+        "unlocks": ["quantum_sniper", "hack_ability"]
+      },
+      "unlockCondition": {
+        "type": "chapter_complete",
+        "value": "chapter_3"
+      },
+      "nextLevel": "level_5",
+      "estimatedTime": 20,
+      "recommendedLevel": 6
+    },
+    {
+      "id": "level_5",
+      "name": "城市废墟：最终之路",
+      "description": "穿越被摧毁的城市废墟，前往裂隙核心。",
+      "chapter": 5,
+      "difficulty": "hard",
+      "environment": {
+        "background": "assets/backgrounds/city_destroyed.png",
+        "music": "assets/music/ruins_ambient.ogg",
+        "ambient": "assets/ambient/wind_debris.ogg",
+        "timeOfDay": "dusk",
+        "weather": "rain"
+      },
+      "objectives": [
+        {
+          "id": "obj_5_1",
+          "description": "穿越城市广场",
+          "type": "reach",
+          "target": "plaza"
+        },
+        {
+          "id": "obj_5_2",
+          "description": "击退裂隙浪潮",
+          "type": "eliminate",
+          "target": "void_wave",
+          "requiredCount": 15
+        },
+        {
+          "id": "obj_5_3",
+          "description": "抵抗裂隙记忆攻击",
+          "type": "survive",
+          "optional": false
+        },
+        {
+          "id": "obj_5_4",
+          "description": "到达裂隙入口",
+          "type": "reach",
+          "target": "core_entrance"
+        }
+      ],
+      "enemies": [
+        {
+          "id": "void_wave",
+          "type": "void_basic",
+          "count": 15,
+          "spawnPoints": ["spawn_street_1", "spawn_street_2", "spawn_building"],
+          "spawnDelay": 1000,
+          "behavior": "wave"
+        },
+        {
+          "id": "void_memory",
+          "type": "void_memory_illusion",
+          "count": 3,
+          "spawnPoints": ["spawn_memory"],
+          "spawnDelay": 8000,
+          "behavior": "haunt"
+        },
+        {
+          "id": "void_destroyer",
+          "type": "void_destroyer_boss",
+          "count": 1,
+          "spawnPoints": ["spawn_boss_plaza"],
+          "behavior": "destroyer"
+        }
+      ],
+      "spawnPoints": [
+        { "id": "spawn_start", "position": { "x": 0, "y": 0, "z": 30 }, "type": "ally" },
+        { "id": "spawn_street_1", "position": { "x": -10, "y": 0, "z": 20 }, "type": "enemy" },
+        { "id": "spawn_street_2", "position": { "x": 10, "y": 0, "z": 15 }, "type": "enemy" },
+        { "id": "spawn_building", "position": { "x": 0, "y": 5, "z": 10 }, "type": "enemy" },
+        { "id": "spawn_memory", "position": { "x": 5, "y": 2, "z": 0 }, "type": "enemy" },
+        { "id": "spawn_boss_plaza", "position": { "x": 0, "y": 0, "z": -10 }, "type": "enemy" },
+        { "id": "plaza", "position": { "x": 0, "y": 0, "z": -5 }, "type": "trigger" },
+        { "id": "core_entrance", "position": { "x": 0, "y": -5, "z": -20 }, "type": "trigger" }
+      ],
+      "player": {
+        "allowedWeapons": ["quantum_pistol", "quantum_sword", "quantum_rifle", "quantum_shotgun", "quantum_sniper", "quantum_railgun"],
+        "maxHealth": 250,
+        "startingPosition": { "x": 0, "y": 0, "z": 30 },
+        "abilities": ["dash", "shield", "scan", "grapple", "hack", "time_slow"]
+      },
+      "reward": {
+        "experience": 750,
+        "items": ["quantum_shard_x15", "phase_module", "void_essence"],
+        "currency": 400,
+        "unlocks": ["quantum_railgun", "time_slow_ability"]
+      },
+      "unlockCondition": {
+        "type": "chapter_complete",
+        "value": "chapter_4"
+      },
+      "nextLevel": "level_6",
+      "estimatedTime": 25,
+      "recommendedLevel": 10
+    },
+    {
+      "id": "level_6",
+      "name": "裂隙核心：最终决战",
+      "description": "面对裂隙意识，做出终极选择。决定两个世界的命运。",
+      "chapter": 6,
+      "difficulty": "nightmare",
+      "environment": {
+        "background": "assets/backgrounds/void_dimension.png",
+        "music": "assets/music/void_theme.ogg",
+        "ambient": "assets/ambient/void_hum.ogg",
+        "timeOfDay": "night",
+        "weather": "storm"
+      },
+      "objectives": [
+        {
+          "id": "obj_6_1",
+          "description": "穿越裂隙通道",
+          "type": "reach",
+          "target": "core_chamber"
+        },
+        {
+          "id": "obj_6_2",
+          "description": "击败裂隙守卫x3",
+          "type": "eliminate",
+          "target": "void_elite",
+          "requiredCount": 3
+        },
+        {
+          "id": "obj_6_3",
+          "description": "面对裂隙意识",
+          "type": "custom",
+          "target": "void_consciousness",
+          "optional": false
+        },
+        {
+          "id": "obj_6_4",
+          "description": "做出选择",
+          "type": "custom",
+          "target": "final_choice",
+          "optional": false
+        }
+      ],
+      "enemies": [
+        {
+          "id": "void_elite",
+          "type": "void_elite_guardian",
+          "count": 3,
+          "spawnPoints": ["spawn_elite_1", "spawn_elite_2", "spawn_elite_3"],
+          "spawnDelay": 5000,
+          "behavior": "elite"
+        },
+        {
+          "id": "void_consciousness",
+          "type": "void_consciousness_boss",
+          "count": 1,
+          "spawnPoints": ["spawn_boss_core"],
+          "behavior": "consciousness"
+        },
+        {
+          "id": "void_minion",
+          "type": "void_minion",
+          "count": 20,
+          "spawnPoints": ["spawn_minion_wave"],
+          "spawnDelay": 800,
+          "behavior": "swarm"
+        }
+      ],
+      "spawnPoints": [
+        { "id": "spawn_portal", "position": { "x": 0, "y": 0, "z": 25 }, "type": "ally" },
+        { "id": "spawn_corridor", "position": { "x": 0, "y": 0, "z": 15 }, "type": "enemy" },
+        { "id": "spawn_elite_1", "position": { "x": -8, "y": 2, "z": 5 }, "type": "enemy" },
+        { "id": "spawn_elite_2", "position": { "x": 8, "y": 2, "z": 5 }, "type": "enemy" },
+        { "id": "spawn_elite_3", "position": { "x": 0, "y": 4, "z": 0 }, "type": "enemy" },
+        { "id": "spawn_minion_wave", "position": { "x": 0, "y": 0, "z": -5 }, "type": "enemy" },
+        { "id": "spawn_boss_core", "position": { "x": 0, "y": 0, "z": -20 }, "type": "enemy" },
+        { "id": "core_chamber", "position": { "x": 0, "y": 0, "z": -15 }, "type": "trigger" },
+        { "id": "final_choice", "position": { "x": 0, "y": 0, "z": -20 }, "type": "trigger" }
+      ],
+      "player": {
+        "allowedWeapons": ["quantum_pistol", "quantum_sword", "quantum_rifle", "quantum_shotgun", "quantum_sniper", "quantum_railgun", "quantum_annihilator"],
+        "maxHealth": 300,
+        "startingPosition": { "x": 0, "y": 0, "z": 25 },
+        "abilities": ["dash", "shield", "scan", "grapple", "hack", "time_slow", "phase_shift", "quantum_blink"]
+      },
+      "reward": {
+        "experience": 1500,
+        "items": ["quantum_shard_x30", "void_crystal", "legendary_weapon_token"],
+        "currency": 1000,
+        "unlocks": ["quantum_annihilator", "true_sight"]
+      },
+      "unlockCondition": {
+        "type": "chapter_complete",
+        "value": "chapter_5"
+      },
+      "nextLevel": null,
+      "estimatedTime": 30,
+      "recommendedLevel": 15
+    }
+  ],
+  "enemyTypes": {
+    "void_spawn": {
+      "name": "裂隙幼体",
+      "health": 50,
+      "damage": 10,
+      "speed": 3,
+      "behavior": "charge",
+      "weakness": ["quantum"]
+    },
+    "void_sentry": {
+      "name": "裂隙哨兵",
+      "health": 100,
+      "damage": 15,
+      "speed": 2,
+      "behavior": "patrol",
+      "weakness": ["quantum", "plasma"]
+    },
+    "void_guardian": {
+      "name": "裂隙守卫",
+      "health": 500,
+      "damage": 30,
+      "speed": 1.5,
+      "behavior": "guardian",
+      "weakness": ["quantum"],
+      "abilities": ["shield", "teleport"]
+    },
+    "void_hunter": {
+      "name": "裂隙猎手",
+      "health": 80,
+      "damage": 25,
+      "speed": 4,
+      "behavior": "stalk",
+      "weakness": ["quantum"],
+      "abilities": ["stealth"]
+    },
+    "security_drone": {
+      "name": "安保无人机",
+      "health": 60,
+      "damage": 12,
+      "speed": 2.5,
+      "behavior": "patrol",
+      "weakness": ["emp", "physical"]
+    },
+    "void_elite_guardian": {
+      "name": "裂隙精英守卫",
+      "health": 800,
+      "damage": 40,
+      "speed": 2,
+      "behavior": "elite",
+      "weakness": ["quantum", "void"],
+      "abilities": ["shield", "phase_attack", "summon"]
+    },
+    "void_consciousness_boss": {
+      "name": "裂隙意识",
+      "health": 5000,
+      "damage": 50,
+      "speed": 1,
+      "behavior": "consciousness",
+      "weakness": [],
+      "abilities": ["reality_warp", "memory_tear", "dimension_rift", "ultimate_annihilate"]
+    }
+  },
+  "weaponTypes": {
+    "quantum_pistol": {
+      "name": "量子手枪",
+      "damage": 20,
+      "fireRate": 3,
+      "ammo": 50,
+      "range": 50,
+      "special": "穿透"
+    },
+    "quantum_sword": {
+      "name": "量子光剑",
+      "damage": 50,
+      "fireRate": 1,
+      "range": 5,
+      "special": "连击"
+    },
+    "quantum_rifle": {
+      "name": "量子步枪",
+      "damage": 35,
+      "fireRate": 5,
+      "ammo": 40,
+      "range": 80,
+      "special": "精准"
+    },
+    "quantum_shotgun": {
+      "name": "量子霰弹枪",
+      "damage": 80,
+      "fireRate": 1,
+      "ammo": 15,
+      "range": 20,
+      "special": "范围"
+    },
+    "quantum_sniper": {
+      "name": "量子狙击枪",
+      "damage": 150,
+      "fireRate": 0.5,
+      "ammo": 10,
+      "range": 200,
+      "special": "穿透"
+    },
+    "quantum_railgun": {
+      "name": "量子轨道炮",
+      "damage": 200,
+      "fireRate": 0.3,
+      "ammo": 5,
+      "range": 150,
+      "special": "秒杀"
+    },
+    "quantum_annihilator": {
+      "name": "量子湮灭者",
+      "damage": 300,
+      "fireRate": 0.2,
+      "ammo": 3,
+      "range": 100,
+      "special": "湮灭"
+    }
+  }
+}
