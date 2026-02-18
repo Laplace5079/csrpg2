@@ -1,11 +1,20 @@
 /**
  * main.ts - 游戏入口点
  * 墨境：孤军 (Ink Realm: Lone Army)
+ * 完整游戏初始化 + 系统整合
  */
 
 import * as THREE from 'three';
-import { Core, GameEvent } from './core';
+import { Core, GameEvent, GamePhase } from './core';
 import { GAME_CONFIG } from './core/constants';
+
+// 导入系统
+import { InputManager } from './engine/InputManager';
+import { Player } from './systems/player/Player';
+import { WeaponSystem } from './systems/player/WeaponSystem';
+import { UIManager } from './systems/ui/UIManager';
+import { NPCManager } from './systems/npc/NPCManager';
+import { QuestSystem } from './systems/npc/QuestSystem';
 
 // ============== 游戏主类 ==============
 class Game {
@@ -14,9 +23,17 @@ class Game {
   private scene: THREE.Scene | null = null;
   private camera: THREE.PerspectiveCamera | null = null;
   
-  // 加载状态
-  private isLoading: boolean = true;
-  private loadingProgress: number = 0;
+  // 游戏系统
+  private inputManager: InputManager | null = null;
+  private player: Player | null = null;
+  private weaponSystem: WeaponSystem | null = null;
+  private uiManager: UIManager | null = null;
+  private npcManager: NPCManager | null = null;
+  private questSystem: QuestSystem | null = null;
+  
+  // 游戏状态
+  private isRunning: boolean = false;
+  private lastTime: number = 0;
   
   constructor() {
     this.core = Core.getInstance();
@@ -27,41 +44,45 @@ class Game {
     console.log('[Game] 初始化墨境：孤军...');
     
     try {
-      // 更新加载状态
+      // 1. 渲染器
       this.updateLoadingStatus('初始化渲染器...', 10);
-      
-      // 初始化渲染器
       await this.initRenderer();
       
-      this.updateLoadingStatus('初始化场景...', 30);
-      
-      // 初始化场景
+      // 2. 场景
+      this.updateLoadingStatus('创建游戏世界...', 30);
       await this.initScene();
       
-      this.updateLoadingStatus('初始化物理...', 50);
-      
-      // 初始化物理
-      await this.initPhysics();
-      
-      this.updateLoadingStatus('初始化核心系统...', 70);
-      
-      // 初始化核心
+      // 3. 核心系统
+      this.updateLoadingStatus('加载核心系统...', 50);
       this.initCore();
       
-      this.updateLoadingStatus('初始化输入...', 85);
-      
-      // 初始化输入
+      // 4. 输入系统
+      this.updateLoadingStatus('初始化控制系统...', 60);
       this.initInput();
       
-      this.updateLoadingStatus('完成!', 100);
+      // 5. 玩家
+      this.updateLoadingStatus('创建玩家角色...', 70);
+      this.initPlayer();
       
-      // 隐藏加载画面
+      // 6. 武器系统
+      this.updateLoadingStatus('加载武器库...', 80);
+      this.initWeapons();
+      
+      // 7. UI
+      this.updateLoadingStatus('初始化界面...', 90);
+      this.initUI();
+      
+      // 8. NPC/任务
+      this.updateLoadingStatus('加载任务系统...', 95);
+      this.initQuests();
+      
+      // 完成
+      this.updateLoadingStatus('准备就绪!', 100);
+      
       setTimeout(() => {
         this.hideLoadingScreen();
+        this.showStartPrompt();
       }, 500);
-      
-      // 启动游戏循环
-      this.startGameLoop();
       
       console.log('[Game] 初始化完成');
     } catch (error) {
@@ -70,189 +91,348 @@ class Game {
     }
   }
   
-  // ============== 渲染器初始化 ==============
+  // ============== 渲染器 ==============
   private async initRenderer(): Promise<void> {
     const container = document.getElementById('game-container');
     if (!container) throw new Error('找不到游戏容器');
     
-    // 创建 WebGL 2.0 渲染器
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('webgl2', {
-      antialias: GAME_CONFIG.ANTIALIAS,
+      antialias: true,
       alpha: false,
       depth: true,
-      stencil: false,
       powerPreference: 'high-performance',
-      failIfMajorPerformanceCaveat: false,
     });
     
-    if (!context) {
-      throw new Error('您的浏览器不支持 WebGL 2.0');
-    }
+    if (!context) throw new Error('不支持 WebGL 2.0');
     
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       context: context as WebGLRenderingContext,
-      antialias: GAME_CONFIG.ANTIALIAS,
-      powerPreference: 'high-performance',
+      antialias: true,
     });
     
-    // 渲染器设置
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.0;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     
-    // 添加到容器
     container.appendChild(this.renderer.domElement);
-    
-    // 保存到 Core
     this.core.renderer = this.renderer;
     
-    console.log('[Game] WebGL 2.0 渲染器已初始化');
+    console.log('[Game] 渲染器就绪');
   }
   
-  // ============== 场景初始化 ==============
+  // ============== 场景 ==============
   private async initScene(): Promise<void> {
-    // 创建场景
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0a0a1a);
-    this.scene.fog = new THREE.FogExp2(0x0a0a1a, 0.015);
+    this.scene.fog = new THREE.FogExp2(0x0a0a1a, 0.01);
     
-    // 创建相机
+    // 相机
     this.camera = new THREE.PerspectiveCamera(
-      GAME_CONFIG.FOV,
-      window.innerWidth / window.innerHeight,
-      GAME_CONFIG.NEAR_PLANE,
-      GAME_CONFIG.FAR_PLANE
+      75, window.innerWidth / window.innerHeight, 0.1, 1000
     );
-    this.camera.position.set(0, GAME_CONFIG.PLAYER_HEIGHT, 0);
+    this.camera.position.set(0, 1.8, 0);
     
-    // 保存到 Core
     this.core.scene = this.scene;
     this.core.camera = this.camera;
     
-    // 添加基础光照
-    const ambientLight = new THREE.AmbientLight(0x404060, 0.5);
-    this.scene.add(ambientLight);
+    // 光照
+    const ambient = new THREE.AmbientLight(0x404060, 0.6);
+    this.scene.add(ambient);
     
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(10, 20, 10);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = GAME_CONFIG.SHADOW_MAP_SIZE;
-    directionalLight.shadow.mapSize.height = GAME_CONFIG.SHADOW_MAP_SIZE;
-    this.scene.add(directionalLight);
+    const directional = new THREE.DirectionalLight(0xffffff, 1);
+    directional.position.set(10, 20, 10);
+    directional.castShadow = true;
+    directional.shadow.mapSize.width = 2048;
+    directional.shadow.mapSize.height = 2048;
+    this.scene.add(directional);
     
-    // 添加测试地面
-    this.createTestEnvironment();
+    // 霓虹点光
+    const neonLight1 = new THREE.PointLight(0xff00ff, 1, 30);
+    neonLight1.position.set(-10, 3, -10);
+    this.scene.add(neonLight1);
     
-    console.log('[Game] 场景已初始化');
-  }
-  
-  // ============== 创建测试环境 ==============
-  private createTestEnvironment(): void {
-    if (!this.scene) return;
+    const neonLight2 = new THREE.PointLight(0x00ffff, 1, 30);
+    neonLight2.position.set(10, 3, 10);
+    this.scene.add(neonLight2);
     
     // 地面
-    const groundGeometry = new THREE.PlaneGeometry(100, 100);
-    const groundMaterial = new THREE.MeshStandardMaterial({
+    const groundGeo = new THREE.PlaneGeometry(100, 100);
+    const groundMat = new THREE.MeshStandardMaterial({
       color: 0x1a1a2e,
       roughness: 0.8,
       metalness: 0.2,
     });
-    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
     this.scene.add(ground);
     
-    // 网格辅助
-    const gridHelper = new THREE.GridHelper(100, 50, 0x00ffff, 0x222244);
-    this.scene.add(gridHelper);
+    // 网格
+    const grid = new THREE.GridHelper(100, 50, 0x00ffff, 0x222244);
+    this.scene.add(grid);
     
-    // 测试方块
-    const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
-    const boxMaterial = new THREE.MeshStandardMaterial({
-      color: 0xff00ff,
-      emissive: 0xff00ff,
-      emissiveIntensity: 0.2,
+    // 障碍物 (可作为掩体)
+    this.createObstacles();
+    
+    console.log('[Game] 场景就绪');
+  }
+  
+  // ============== 创建障碍物 ==============
+  private createObstacles(): void {
+    if (!this.scene) return;
+    
+    const boxGeo = new THREE.BoxGeometry(2, 2, 2);
+    const boxMat = new THREE.MeshStandardMaterial({
+      color: 0x333355,
+      roughness: 0.7,
+      metalness: 0.3,
     });
     
-    for (let i = 0; i < 10; i++) {
-      const box = new THREE.Mesh(boxGeometry, boxMaterial);
+    // 随机放置一些箱子
+    for (let i = 0; i < 20; i++) {
+      const box = new THREE.Mesh(boxGeo, boxMat);
       box.position.set(
-        (Math.random() - 0.5) * 40,
+        (Math.random() - 0.5) * 60,
         1,
-        (Math.random() - 0.5) * 40
+        (Math.random() - 0.5) * 60
       );
       box.castShadow = true;
       box.receiveShadow = true;
       this.scene.add(box);
     }
     
-    console.log('[Game] 测试环境已创建');
-  }
-  
-  // ============== 物理初始化 ==============
-  private async initPhysics(): Promise<void> {
-    // 物理引擎将在此处初始化 Cannon-es
-    // 暂时跳过，使用简单碰撞检测
+    // 墙壁
+    const wallGeo = new THREE.BoxGeometry(20, 4, 1);
+    const wallMat = new THREE.MeshStandardMaterial({
+      color: 0x222244,
+      roughness: 0.9,
+    });
     
-    console.log('[Game] 物理系统已初始化 (简化版)');
+    const walls = [
+      { pos: [0, 2, -30], rot: 0 },
+      { pos: [0, 2, 30], rot: 0 },
+      { pos: [-30, 2, 0], rot: Math.PI / 2 },
+      { pos: [30, 2, 0], rot: Math.PI / 2 },
+    ];
+    
+    walls.forEach(w => {
+      const wall = new THREE.Mesh(wallGeo, wallMat);
+      wall.position.set(w.pos[0], w.pos[1], w.pos[2]);
+      wall.rotation.y = w.rot;
+      wall.castShadow = true;
+      wall.receiveShadow = true;
+      this.scene.add(wall);
+    });
   }
   
-  // ============== 核心初始化 ==============
+  // ============== 核心系统 ==============
   private initCore(): void {
     this.core.initialize();
-    
-    // 监听核心事件
-    this.core.eventBus.on(GameEvent.CORE_INITIALIZED, () => {
-      console.log('[Game] 核心系统已就绪');
-    });
-    
     this.core.eventBus.on(GameEvent.LEVEL_UP, (level: number) => {
-      console.log(`[Game] 升级到 ${level} 级!`);
-      this.showNotification(`升级到 ${level} 级!`);
+      this.uiManager?.showNotification(`升级到 ${level} 级!`);
     });
   }
   
-  // ============== 输入初始化 ==============
+  // ============== 输入系统 ==============
   private initInput(): void {
-    // 窗口大小调整
-    window.addEventListener('resize', () => this.onWindowResize());
+    this.inputManager = new InputManager();
+    this.inputManager.init(document.body);
     
-    // 点击启动
-    document.addEventListener('click', () => {
-      if (!this.core.gameState.isPlaying()) {
-        this.core.startNewGame();
-      }
+    // 窗口调整
+    window.addEventListener('resize', () => this.onResize());
+    
+    console.log('[Game] 输入系统就绪');
+  }
+  
+  // ============== 玩家 ==============
+  private initPlayer(): void {
+    if (!this.camera) return;
+    
+    this.player = new Player(this.camera, this.inputManager!, this.core);
+    console.log('[Game] 玩家就绪');
+  }
+  
+  // ============== 武器系统 ==============
+  private initWeapons(): void {
+    if (!this.player || !this.scene) return;
+    
+    this.weaponSystem = new WeaponSystem(this.core, this.player);
+    this.weaponSystem.setScene(this.scene);
+    
+    console.log('[Game] 武器系统就绪');
+  }
+  
+  // ============== UI ==============
+  private initUI(): void {
+    this.uiManager = UIManager.getInstance();
+    this.uiManager.init();
+    
+    // 暂停菜单按钮
+    this.inputManager?.onKeyDownRegister('Escape', () => {
+      this.uiManager?.togglePauseMenu();
     });
     
-    console.log('[Game] 输入系统已初始化');
+    // 物品栏
+    this.inputManager?.onKeyDownRegister('Tab', () => {
+      this.uiManager?.toggleInventory();
+    });
+    
+    console.log('[Game] UI就绪');
+  }
+  
+  // ============== 任务系统 ==============
+  private initQuests(): void {
+    this.npcManager = NPCManager.getInstance();
+    this.questSystem = new QuestSystem();
+    console.log('[Game] 任务系统就绪');
+  }
+  
+  // ============== 开始游戏 ==============
+  private startGame(): void {
+    if (this.isRunning) return;
+    
+    this.isRunning = true;
+    this.core.startNewGame();
+    
+    // 请求指针锁定
+    this.inputManager?.requestPointerLock();
+    
+    // 开始游戏循环
+    this.lastTime = performance.now();
+    this.gameLoop();
   }
   
   // ============== 游戏循环 ==============
-  private startGameLoop(): void {
-    const gameLoop = (time: number) => {
-      requestAnimationFrame(gameLoop);
-      
-      // 更新核心
-      this.core.update(time);
-      
-      // 渲染场景
-      if (this.renderer && this.scene && this.camera) {
-        this.renderer.render(this.scene, this.camera);
-      }
-    };
+  private gameLoop = (): void => {
+    if (!this.isRunning) return;
     
-    requestAnimationFrame(gameLoop);
-    console.log('[Game] 游戏循环已启动');
+    requestAnimationFrame(this.gameLoop);
+    
+    const currentTime = performance.now();
+    const deltaTime = Math.min((currentTime - this.lastTime) / 1000, 0.1);
+    this.lastTime = currentTime;
+    
+    // 更新核心
+    this.core.update(currentTime);
+    
+    // 更新玩家
+    if (this.player && this.inputManager?.getState().isPointerLocked) {
+      this.player.update(deltaTime);
+      
+      // 更新武器
+      if (this.weaponSystem) {
+        this.weaponSystem.update(deltaTime);
+      }
+      
+      // 更新UI数据
+      this.updateUI();
+    }
+    
+    // 渲染
+    if (this.renderer && this.scene && this.camera) {
+      this.renderer.render(this.scene, this.camera);
+    }
+  };
+  
+  // ============== 更新UI ==============
+  private updateUI(): void {
+    if (!this.player || !this.weaponSystem) return;
+    
+    const weapon = this.weaponSystem.getCurrentWeapon();
+    
+    this.uiManager?.update({
+      health: {
+        current: this.core.player.health,
+        max: this.core.player.maxHealth,
+        armor: this.core.player.armor,
+      },
+      ammo: weapon ? {
+        current: weapon.currentAmmo,
+        total: weapon.totalAmmo,
+        weapon: weapon.data.name,
+      } : undefined,
+    });
+  }
+  
+  // ============== 显示开始提示 ==============
+  private showStartPrompt(): void {
+    const prompt = document.createElement('div');
+    prompt.id = 'start-prompt';
+    prompt.innerHTML = `
+      <div class="start-title">墨境：孤军</div>
+      <div class="start-subtitle">Ink Realm: Lone Army</div>
+      <div class="start-instruction">点击开始游戏</div>
+      <div class="start-controls">
+        <div>WASD - 移动</div>
+        <div>空格 - 跳跃</div>
+        <div>鼠标 - 瞄准</div>
+        <div>左键 - 射击</div>
+        <div>R - 换弹</div>
+      </div>
+    `;
+    prompt.style.cssText = `
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(10, 10, 26, 0.95);
+      z-index: 1000;
+      cursor: pointer;
+    `;
+    
+    // 添加样式
+    const style = document.createElement('style');
+    style.textContent = `
+      .start-title {
+        font-size: 72px;
+        font-weight: bold;
+        background: linear-gradient(90deg, #ff00ff, #00ffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+      }
+      .start-subtitle {
+        font-size: 24px;
+        color: #888;
+        margin-bottom: 50px;
+      }
+      .start-instruction {
+        font-size: 28px;
+        color: #00ffff;
+        animation: pulse 2s infinite;
+        margin-bottom: 30px;
+      }
+      .start-controls {
+        font-size: 16px;
+        color: #666;
+        text-align: center;
+        line-height: 2;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    prompt.addEventListener('click', () => {
+      prompt.remove();
+      this.startGame();
+    });
+    
+    document.body.appendChild(prompt);
   }
   
   // ============== 窗口调整 ==============
-  private onWindowResize(): void {
+  private onResize(): void {
     if (!this.camera || !this.renderer) return;
     
     this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -262,8 +442,6 @@ class Game {
   
   // ============== 加载状态 ==============
   private updateLoadingStatus(status: string, progress: number): void {
-    this.loadingProgress = progress;
-    
     const loadingBar = document.getElementById('loading-bar');
     const loadingStatus = document.getElementById('loading-status');
     
@@ -273,51 +451,20 @@ class Game {
   
   private hideLoadingScreen(): void {
     const loadingScreen = document.getElementById('loading-screen');
-    if (loadingScreen) {
-      loadingScreen.classList.add('hidden');
-    }
+    if (loadingScreen) loadingScreen.classList.add('hidden');
   }
   
-  // ============== 通知 ==============
-  private showNotification(message: string): void {
-    // 简单的通知实现
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-      position: fixed;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(90deg, #ff00ff, #00ffff);
-      color: white;
-      padding: 15px 30px;
-      border-radius: 8px;
-      font-size: 24px;
-      font-weight: bold;
-      z-index: 1001;
-      animation: fadeOut 2s forwards;
-    `;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => notification.remove(), 2000);
-  }
-  
-  // ============== 错误显示 ==============
   private showError(message: string): void {
-    const loadingScreen = document.getElementById('loading-screen');
-    if (loadingScreen) {
-      const status = document.getElementById('loading-status');
-      if (status) {
-        status.style.color = '#ff0000';
-        status.textContent = message;
-      }
+    const status = document.getElementById('loading-status');
+    if (status) {
+      status.style.color = '#ff0000';
+      status.textContent = message;
     }
   }
 }
 
-// ============== 启动游戏 ==============
+// ============== 启动 ==============
 const game = new Game();
 game.init();
 
-// 导出以供调试
 (window as any).game = game;
