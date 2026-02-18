@@ -75,10 +75,11 @@ export class Player {
 
   private updateMovement(inputState: any, deltaTime: number): void {
     const movement = this.inputManager.getMovement();
+    const isMoving = movement.x !== 0 || movement.z !== 0;
     
     let targetSpeed = this.moveSpeed;
     
-    if (inputState.sprint && this.stamina > 0 && this.isMoving()) {
+    if (inputState.sprint && this.stamina > 0 && isMoving) {
       this.isSprinting = true;
       targetSpeed = this.sprintSpeed;
       this.stamina = Math.max(0, this.stamina - this.sprintDrain * deltaTime);
@@ -98,8 +99,20 @@ export class Player {
     targetVelocity.addScaledVector(forward, -movement.z * targetSpeed);
     targetVelocity.addScaledVector(right, movement.x * targetSpeed);
     
-    this.velocity.x = targetVelocity.x;
-    this.velocity.z = targetVelocity.z;
+    // 摩擦力参数
+    const acceleration = 25;  // 加速度
+    const friction = 15;     // 摩擦力
+    
+    // 平滑加速/减速 (lerp)
+    if (isMoving) {
+      // 加速
+      this.velocity.x = THREE.MathUtils.lerp(this.velocity.x, targetVelocity.x, acceleration * deltaTime);
+      this.velocity.z = THREE.MathUtils.lerp(this.velocity.z, targetVelocity.z, acceleration * deltaTime);
+    } else {
+      // 摩擦减速
+      this.velocity.x = THREE.MathUtils.lerp(this.velocity.x, 0, friction * deltaTime);
+      this.velocity.z = THREE.MathUtils.lerp(this.velocity.z, 0, friction * deltaTime);
+    }
     
     if (inputState.jump && this.isGrounded) {
       this.velocity.y = this.jumpForce;
