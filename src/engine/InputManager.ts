@@ -227,10 +227,12 @@ export class InputManager {
   
   public getMouseDelta(): { x: number; y: number } {
     const sens = this.state.aim ? this.aimSensitivity : this.sensitivity;
-    return {
-      x: this.state.mouseDeltaX * sens,
-      y: this.state.mouseDeltaY * sens,
-    };
+    const x = this.state.mouseDeltaX * sens;
+    const y = this.state.mouseDeltaY * sens;
+    // 消费掉 delta，防止持续旋转
+    this.state.mouseDeltaX = 0;
+    this.state.mouseDeltaY = 0;
+    return { x, y };
   }
   
   public isMoving(): boolean {
